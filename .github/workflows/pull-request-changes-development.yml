@@ -32,8 +32,6 @@ jobs:
       - name: Pull Origin
         run: |
           git merge origin-core/main ${{ vars.REPO_BRANCH }} --strategy-option theirs
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -42,4 +40,3 @@ jobs:
           body: "Update ONEGA CORE code"
           labels: "update-core"
           reviewers: ${{ vars.REPO_REVIEWER }}
-          branch: ${{ vars.REPO_BRANCH }}
