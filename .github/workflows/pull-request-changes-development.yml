@@ -10,12 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PRINT REPO URL
-        env:
-          REPO_URL: ${{ vars.REPO_URL }}
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          echo "$REPO_URL"
-          echo "$REPO_TOKEN"
+          echo "REPO_URL ${{ vars.REPO_URL }}"
+          echo "REPO_TOKEN ${{ secrets.REPO_TOKEN }}"
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
