@@ -25,20 +25,9 @@ jobs:
           git config user.email 'floo@users.noreply.github.com'
       - name: Add Main Repo As Remote
         run: |
-          git remote add origin-core https://github.com/lubab-floo/parent-repo.git
+          git remote add origin-core https://lubab-floo:${{ secrets.REPO_TOKEN }}@github.com/lubab-floo/parent-repo.git
           git fetch origin-core main
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: Pull Origin
         run: |
           git merge origin-core/main ${{ vars.REPO_BRANCH }} --strategy-option theirs
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.REPO_TOKEN }}
-          title: Update ONEGA CORE
-          body: "Update ONEGA CORE code"
-          labels: "update-core"
-          reviewers: ${{ vars.REPO_REVIEWER }}
-          branch: core
-          base: main
+          git push origin ${{ vars.REPO_BRANCH }}
