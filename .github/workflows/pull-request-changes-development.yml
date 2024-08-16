@@ -27,7 +27,21 @@ jobs:
         run: |
           git remote add origin-core https://lubab-floo:${{ secrets.REPO_TOKEN }}@github.com/lubab-floo/parent-repo.git
           git fetch origin-core main
-      - name: Pull Origin
+      - name: Update Core Branch On Repository
         run: |
           git merge origin-core/main ${{ vars.REPO_BRANCH }} --strategy-option theirs
           git push origin ${{ vars.REPO_BRANCH }}
+      - name: Create Pull Request
+        run: |
+          # Store the PAT in a file that can be accessed by the
+          # GitHub CLI.
+          echo "${{ secrets.REPO_TOKEN }}" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title "chore: update core code" \
+            --head "${{ vars.REPO_BRANCH }}" \
+            --base "main"
