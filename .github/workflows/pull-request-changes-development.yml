@@ -3,7 +3,7 @@ name: PULL REQUEST ON FORK REPOSITORY
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
   pdps:
