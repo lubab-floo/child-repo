@@ -25,7 +25,7 @@ jobs:
           git config user.email 'floo@users.noreply.github.com'
       - name: Pull Origin
         run: |
-          git pull origin
+          git pull origin ${{ vars.REPO_BRANCH }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
@@ -34,3 +34,4 @@ jobs:
           body: "Update ONEGA CORE code"
           labels: "update-core"
           reviewers: ${{ vars.REPO_REVIEWER }}
+          branch: ${{ vars.REPO_BRANCH }}
