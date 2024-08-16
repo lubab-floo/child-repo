@@ -1,0 +1,32 @@
+name: PULL REQUEST ON FORK REPOSITORY
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  pdps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.REPO_URL }}
+          token: ${{ secrets.REPO_TOKEN }}
+          ref: ${{ vars.REPO_BRANCH }}
+      - name: Setup Git Config
+        run: |
+          git config user.name 'floo'
+          git config user.email 'floo@users.noreply.github.com'
+      - name: Pull Origin
+        run: |
+          git pull origin
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          title: Update ONEGA CORE
+          body: "Update ONEGA CORE code"
+          labels: "update-core"
+          reviewers: ${{ vars.REPO_REVIEWER }}
