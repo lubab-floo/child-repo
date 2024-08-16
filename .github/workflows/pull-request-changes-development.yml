@@ -32,7 +32,6 @@ jobs:
       - name: Pull Origin
         run: |
           git merge origin-core/main ${{ vars.REPO_BRANCH }} --strategy-option theirs
-          git push origin ${{ vars.REPO_BRANCH }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: Create Pull Request
