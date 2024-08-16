@@ -1,0 +1,47 @@
+name: PULL REQUEST ON FORK REPOSITORY
+
+on:
+  push:
+    branches:
+      -  main
+
+jobs:
+  pdps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PRINT REPO URL
+        run: |
+          echo "REPO_URL ${{ vars.REPO_URL }}"
+          echo "REPO_TOKEN ${{ secrets.REPO_TOKEN }}"
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.REPO_URL }}
+          token: ${{ secrets.REPO_TOKEN }}
+          ref: ${{ vars.REPO_BRANCH }}
+      - name: Setup Git Config
+        run: |
+          git config user.name 'lubab'
+          git config user.email 'lubab@floo.id'
+      - name: Add Main Repo As Remote
+        run: |
+          git remote add origin-core https://lubab-floo:${{ secrets.REPO_TOKEN }}@github.com/lubab-floo/parent-repo.git
+          git fetch origin-core main
+      - name: Update Core Branch On Repository
+        run: |
+          git merge origin-core/main ${{ vars.REPO_BRANCH }} --strategy-option theirs
+          git push origin ${{ vars.REPO_BRANCH }}
+      - name: Create Pull Request
+        run: |
+          # Store the PAT in a file that can be accessed by the
+          # GitHub CLI.
+          echo "${{ secrets.REPO_TOKEN }}" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title "chore: update core code" \
+            --head "${{ vars.REPO_BRANCH }}" \
+            --base "main"
