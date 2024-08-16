@@ -23,9 +23,18 @@ jobs:
         run: |
           git config user.name 'floo'
           git config user.email 'floo@users.noreply.github.com'
+      - name: Add Main Repo As Remote
+        run: |
+          git remote add origin-core https://github.com/lubab-floo/parent-repo.git
+          git fetch origin-core
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: Pull Origin
         run: |
-          git pull origin ${{ vars.REPO_BRANCH }}
+          git pull origin-core ${{ vars.REPO_BRANCH }}
+          git push origin ${{ vars.REPO_BRANCH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
