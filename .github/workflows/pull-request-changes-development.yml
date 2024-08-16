@@ -21,8 +21,8 @@ jobs:
           ref: ${{ vars.REPO_BRANCH }}
       - name: Setup Git Config
         run: |
-          git config user.name 'floo'
-          git config user.email 'floo@users.noreply.github.com'
+          git config user.name 'lubab'
+          git config user.email 'lubab@floo.id'
       - name: Add Main Repo As Remote
         run: |
           git remote add origin-core https://lubab-floo:${{ secrets.REPO_TOKEN }}@github.com/lubab-floo/parent-repo.git
